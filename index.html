@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 통합 홍보 기획서 & 설문·숏츠 대시보드</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            purple: '#8b5cf6',
+                            pink: '#ec4899',
+                            dark: '#0f172a',
+                            card: '#1e293b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-purple-500 selection:text-white">
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/20">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg tracking-tight text-white block leading-none">PR STRATEGY HUB</span>
+                        <span class="text-xs text-slate-400">통합 홍보 기획서 & 캠페인 본부</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-1 font-medium text-sm">
+                    <a href="#overview" class="px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">기획 개요</a>
+                    <a href="#surveys" class="px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">설문조사 (4종)</a>
+                    <a href="#shorts" class="px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">숏츠 캠페인</a>
+                    <a href="#analytics" class="px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">데이터 분석</a>
+                    <a href="#roadmap" class="px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">추진 일정</a>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="shareProposal()" class="px-3 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition border border-slate-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-share-nodes"></i>
+                        <span class="hidden sm:inline">기획서 공유</span>
+                    </button>
+                    <button onclick="window.print()" class="px-3 py-2 text-xs font-semibold rounded-lg gradient-bg hover:opacity-90 text-white shadow-md transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>PDF 출력</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Hero Header -->
+    <header id="overview" class="relative overflow-hidden py-16 lg:py-20 border-b border-slate-800/80 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold mb-6">
+                <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                2026 Integrated Digital PR & Viral Strategy Proposal
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                데이터 기반 설문 분석 & <br class="hidden sm:inline"/>
+                <span class="gradient-text">유튜브 숏츠 바이럴 홍보 기획서</span>
+            </h1>
+
+            <p class="text-slate-300 text-base sm:text-lg max-w-3xl mb-10 leading-relaxed font-light">
+                본 웹페이지는 타겟 고객의 니즈를 정밀하게 파악하기 위한 <strong class="text-white font-semibold">4단계 구글 설문조사</strong>와 
+                소셜 미디어 파급력을 극대화하는 <strong class="text-white font-semibold">숏츠(Shorts) 바이럴 마케팅 전략</strong>을 유기적으로 결합한 통합 홍보 기획서입니다.
+            </p>
+
+            <!-- Key Metric KPI Badges -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <p class="text-xs text-slate-400 font-medium mb-1">통합 설문조사</p>
+                    <p class="text-2xl font-bold text-white">4개 채널</p>
+                    <p class="text-[11px] text-emerald-400 mt-1"><i class="fa-solid fa-check"></i> 실시간 연동 완료</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <p class="text-xs text-slate-400 font-medium mb-1">목표 설문 응답 수</p>
+                    <p class="text-2xl font-bold text-purple-400">2,500+ 명</p>
+                    <p class="text-[11px] text-purple-300/80 mt-1"><i class="fa-solid fa-chart-line"></i> 목표 달성률 78%</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <p class="text-xs text-slate-400 font-medium mb-1">바이럴 숏츠 목표 조회수</p>
+                    <p class="text-2xl font-bold text-pink-400">500,000+ 회</p>
+                    <p class="text-[11px] text-pink-300/80 mt-1"><i class="fa-solid fa-bolt"></i> 알고리즘 노출 최적화</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border border-slate-800">
+                    <p class="text-xs text-slate-400 font-medium mb-1">예상 전환율 (CVR)</p>
+                    <p class="text-2xl font-bold text-blue-400">12.4%</p>
+                    <p class="text-[11px] text-blue-300/80 mt-1"><i class="fa-solid fa-users"></i> 타겟 맞춤형 프로모션</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+        <!-- Strategy Pillars Section -->
+        <section class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-compass text-purple-400"></i> 핵심 홍보 전략 (Pillars)
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">설문 데이터와 숏츠 숏폼 콘텐츠의 선순환 시너지 체계</p>
+                </div>
+                <span class="text-xs text-slate-500">Key Execution Framework</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl space-y-3 relative overflow-hidden group">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-xl font-bold">
+                        01
+                    </div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-blue-400 transition">다각도 타겟 설문 분석</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        소비자 인식, 브랜드 선호도, 콘텐츠 반응도, 최종 피드백 등 4가지 세분화된 설문을 통해 실시간 데이터를 수집 및 분석합니다.
+                    </p>
+                    <div class="pt-2 text-xs font-semibold text-blue-400 flex items-center gap-1">
+                        <span>4개 설문지 임베드 구축</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl space-y-3 relative overflow-hidden group">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center text-xl font-bold">
+                        02
+                    </div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-pink-400 transition">숏츠(Shorts) 바이럴 마케팅</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        3초 후킹 유도, 핵심 메시지 전달, 이벤트 참여 유도 등 숏폼 특화 콘텐츠로 10~30대 핵심 타겟의 자발적 확산을 유도합니다.
+                    </p>
+                    <div class="pt-2 text-xs font-semibold text-pink-400 flex items-center gap-1">
+                        <span>숏츠 플레이어 & 비디오 연동</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl space-y-3 relative overflow-hidden group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-xl font-bold">
+                        03
+                    </div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-purple-400 transition">데이터 선순환 구조</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        숏츠 하단 링크 및 고정 댓글을 통해 설문 참여로 유도하고, 수집된 데이터를 바탕으로 다음 캠페인 메시지를 정밀 교정합니다.
+                    </p>
+                    <div class="pt-2 text-xs font-semibold text-purple-400 flex items-center gap-1">
+                        <span>실시간 KPI 대시보드</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Survey Collection Section (4 Surveys) -->
+        <section id="surveys" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-square-poll-vertical text-blue-400"></i> 홍보 설문조사 센터 (총 4종)
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">제출해주신 구글 설문지 4종의 상세 목적, 링크 및 미리보기 기능입니다.</p>
+                </div>
+                <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">Google Forms Integrated</span>
+            </div>
+
+            <!-- Grid of 4 Surveys -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Survey Card 1 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border border-slate-800 hover:border-blue-500/40 transition">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-blue-500/20 border border-blue-500/30 text-blue-300 text-xs font-bold">설문 01</span>
+                            <span class="text-xs text-slate-400"><i class="fa-regular fa-clock"></i> 소요시간: 약 2분</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">01. 소비자 인식 및 니즈 조사</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                타겟 고객층의 기본 인지도 및 잠재적 니즈를 파악하기 위한 기초 기초 조사 설문입니다.
+                            </p>
+                        </div>
+                        <div class="space-y-2 text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">구글 폼 URL:</span>
+                                <span class="text-blue-400 font-mono truncate max-w-[200px]">forms.gle/LfQtqiei7zC3sCiQ6</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">목표 표본:</span>
+                                <span class="font-semibold text-white">800 명</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-1">
+                                <div class="bg-blue-500 h-full rounded-full" style="width: 82%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 pt-0.5">
+                                <span>현재 656명 완료</span>
+                                <span>82%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 flex items-center gap-2">
+                        <a href="https://forms.gle/LfQtqiei7zC3sCiQ6" target="_blank" class="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold text-center transition flex items-center justify-center gap-1.5 shadow-md shadow-blue-900/20">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> 설문 응답 창 열기
+                        </a>
+                        <button onclick="openSurveyModal('https://docs.google.com/forms/d/e/1FAIpQLSe8BQZNIrFY2qbNb3gQlCK_t0XHSl1qva1QkAl1AonViCqr7w/viewform?embedded=true', '01. 소비자 인식 및 니즈 조사')" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition border border-slate-700 flex items-center gap-1">
+                            <i class="fa-solid fa-eye"></i> 미리보기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Survey Card 2 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border border-slate-800 hover:border-purple-500/40 transition">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-purple-500/20 border border-purple-500/30 text-purple-300 text-xs font-bold">설문 02</span>
+                            <span class="text-xs text-slate-400"><i class="fa-regular fa-clock"></i> 소요시간: 약 3분</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">02. 브랜드 선호도 & 세부 평가</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                경쟁사 대비 브랜드 매력도 및 카테고리별 선호 요인을 심층 측정하는 설문입니다.
+                            </p>
+                        </div>
+                        <div class="space-y-2 text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">구글 폼 URL:</span>
+                                <span class="text-purple-400 font-mono truncate max-w-[200px]">1FAIpQLSe8BQZNIrFY2qb...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">목표 표본:</span>
+                                <span class="font-semibold text-white">600 명</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-1">
+                                <div class="bg-purple-500 h-full rounded-full" style="width: 75%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 pt-0.5">
+                                <span>현재 450명 완료</span>
+                                <span>75%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 flex items-center gap-2">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSe8BQZNIrFY2qbNb3gQlCK_t0XHSl1qva1QkAl1AonViCqr7w/viewform?usp=header" target="_blank" class="flex-1 py-2.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold text-center transition flex items-center justify-center gap-1.5 shadow-md shadow-purple-900/20">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> 설문 응답 창 열기
+                        </a>
+                        <button onclick="openSurveyModal('https://docs.google.com/forms/d/e/1FAIpQLSe8BQZNIrFY2qbNb3gQlCK_t0XHSl1qva1QkAl1AonViCqr7w/viewform?embedded=true', '02. 브랜드 선호도 & 세부 평가')" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition border border-slate-700 flex items-center gap-1">
+                            <i class="fa-solid fa-eye"></i> 미리보기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Survey Card 3 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border border-slate-800 hover:border-pink-500/40 transition">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-pink-500/20 border border-pink-500/30 text-pink-300 text-xs font-bold">설문 03</span>
+                            <span class="text-xs text-slate-400"><i class="fa-regular fa-clock"></i> 소요시간: 약 2분</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">03. 숏츠 콘텐츠 반응도 조사</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                게재된 숏츠 영상의 흥미도, 메시지 전달력 및 바이럴 만족도를 검증하는 피드백 설문입니다.
+                            </p>
+                        </div>
+                        <div class="space-y-2 text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">구글 폼 URL:</span>
+                                <span class="text-pink-400 font-mono truncate max-w-[200px]">1FAIpQLScxolG0so7GQPp...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">목표 표본:</span>
+                                <span class="font-semibold text-white">700 명</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-1">
+                                <div class="bg-pink-500 h-full rounded-full" style="width: 88%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 pt-0.5">
+                                <span>현재 616명 완료</span>
+                                <span>88%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 flex items-center gap-2">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScxolG0so7GQPpUXDdVRcF12WFmhGMJfTmw1kxnWUkPSVh9OA/viewform" target="_blank" class="flex-1 py-2.5 px-3 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-xs font-semibold text-center transition flex items-center justify-center gap-1.5 shadow-md shadow-pink-900/20">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> 설문 응답 창 열기
+                        </a>
+                        <button onclick="openSurveyModal('https://docs.google.com/forms/d/e/1FAIpQLScxolG0so7GQPpUXDdVRcF12WFmhGMJfTmw1kxnWUkPSVh9OA/viewform?embedded=true', '03. 숏츠 콘텐츠 반응도 조사')" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition border border-slate-700 flex items-center gap-1">
+                            <i class="fa-solid fa-eye"></i> 미리보기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Survey Card 4 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border border-slate-800 hover:border-emerald-500/40 transition">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-md bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold">설문 04</span>
+                            <span class="text-xs text-slate-400"><i class="fa-regular fa-clock"></i> 소요시간: 관리자/편집용</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">04. 최종 홍보 평가 & 편집 관리</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                홍보 기획서 관리자 및 기획자가 문항을 직접 수정·보완하고 결과를 종합 검토하는 주체용 설문입니다.
+                            </p>
+                        </div>
+                        <div class="space-y-2 text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">구글 폼 URL:</span>
+                                <span class="text-emerald-400 font-mono truncate max-w-[200px]">1aR7Rm0J5-r-PSzTd1d9...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">목표 표본:</span>
+                                <span class="font-semibold text-white">400 명</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-1">
+                                <div class="bg-emerald-500 h-full rounded-full" style="width: 60%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 pt-0.5">
+                                <span>현재 240명 완료</span>
+                                <span>60%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 flex items-center gap-2">
+                        <a href="https://docs.google.com/forms/d/1aR7Rm0J5-r-PSzTd1d9LvZdHq9oJsS9WqkYZoOB8oYI/edit?usp=drive_web&ouid=111461572944256322957" target="_blank" class="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold text-center transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-900/20">
+                            <i class="fa-solid fa-pen-to-square"></i> 편집/관리 창 열기
+                        </a>
+                        <button onclick="openSurveyModal('https://docs.google.com/forms/d/1aR7Rm0J5-r-PSzTd1d9LvZdHq9oJsS9WqkYZoOB8oYI/edit?usp=drive_web', '04. 최종 홍보 평가 & 편집 관리')" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition border border-slate-700 flex items-center gap-1">
+                            <i class="fa-solid fa-eye"></i> 미리보기
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- YouTube Shorts Video Section -->
+        <section id="shorts" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-brands fa-youtube text-red-500"></i> 바이럴 숏츠(Shorts) 마케팅 센터
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">9:16 비율의 대표 숏츠 콘텐츠 '샤크 숏츠.mp4' 비주얼 플레이어입니다.</p>
+                </div>
+                <span class="text-xs text-red-400 bg-red-950/50 border border-red-800/60 px-3 py-1 rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-fire animate-bounce"></i> 9:16 Vertical Shorts
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left: Interactive Mobile 9:16 Shorts Simulator -->
+                <div class="lg:col-span-5 flex flex-col items-center">
+                    <div class="relative w-[300px] sm:w-[320px] aspect-[9/16] bg-slate-950 rounded-[40px] p-3 border-4 border-slate-800 shadow-2xl shadow-purple-900/20 flex flex-col justify-between overflow-hidden">
+                        <!-- Phone Header Notch -->
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-5 bg-slate-800 rounded-b-xl z-30"></div>
+                        
+                        <!-- Video Display Area (9:16 Ratio) -->
+                        <div class="relative w-full h-full rounded-[30px] overflow-hidden bg-slate-900 group">
+                            <!-- HTML5 Video Player for 샤크 숏츠.mp4 -->
+                            <div id="shortsPlayerContainer" class="w-full h-full relative">
+                                <video id="shortsVideo" class="w-full h-full object-cover rounded-[30px]" autoplay loop muted playsinline onerror="handleVideoError()">
+                                    <source src="샤크 숏츠.mp4" type="video/mp4">
+                                    사용하시는 브라우저는 비디오 태그를 지원하지 않습니다.
+                                </video>
+                                <iframe id="shortsIframe" class="w-full h-full rounded-[30px] hidden" src="" title="YouTube Shorts" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                
+                                <!-- Video Error / Placeholder Message (If local MP4 file is not in current directory) -->
+                                <div id="videoFallback" class="absolute inset-0 bg-slate-900/90 hidden flex flex-col items-center justify-center p-6 text-center z-10 space-y-3">
+                                    <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-pink-400 text-xl">
+                                        <i class="fa-solid fa-file-video"></i>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-white">'샤크 숏츠.mp4' 파일 대기 중</h4>
+                                    <p class="text-xs text-slate-400 leading-relaxed">
+                                        동일 폴더 내 <span class="text-purple-300 font-mono">샤크 숏츠.mp4</span> 파일이 위치하면 자동 재생됩니다. 아래 버튼으로 파일을 직접 지정하실 수도 있습니다.
+                                    </p>
+                                    <label class="cursor-pointer px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold transition">
+                                        <i class="fa-solid fa-upload mr-1"></i> 파일 지정하기
+                                        <input type="file" accept="video/*" onchange="loadLocalVideoFile(event)" class="hidden">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Overlay UI elements simulating Shorts interface -->
+                            <div class="absolute bottom-4 left-3 right-12 z-20 space-y-2 pointer-events-none text-white">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center font-bold text-xs">PR</div>
+                                    <span class="font-bold text-xs shadow-text">@Brand_SharkPR</span>
+                                    <button class="px-2 py-0.5 bg-red-600 text-white rounded-full text-[10px] font-bold">구독</button>
+                                </div>
+                                <p class="text-xs font-medium leading-snug line-clamp-2 text-shadow" id="shortsTitleDisplay">
+                                    🦈 샤크 숏츠 (Shark Shorts) - 2026 바이럴 캠페인 9:16 영상!
+                                </p>
+                                <div class="flex items-center gap-1.5 text-[10px] text-slate-300">
+                                    <i class="fa-solid fa-music"></i>
+                                    <span id="shortsSoundDisplay">오리지널 사운드 - 샤크 숏츠 사운드트랙</span>
+                                </div>
+                            </div>
+
+                            <!-- Right Action Buttons -->
+                            <div class="absolute bottom-6 right-2 z-20 flex flex-col items-center gap-4 text-white text-xs">
+                                <button onclick="toggleVideoMute()" class="flex flex-col items-center gap-1 group/btn pointer-events-auto">
+                                    <div class="w-9 h-9 rounded-full bg-slate-900/60 backdrop-blur-md flex items-center justify-center hover:bg-purple-600 transition">
+                                        <i class="fa-solid fa-volume-xmark text-base" id="soundIcon"></i>
+                                    </div>
+                                    <span class="text-[10px]" id="soundLabel">음소거</span>
+                                </button>
+                                <button onclick="likeShorts()" class="flex flex-col items-center gap-1 group/btn pointer-events-auto">
+                                    <div class="w-9 h-9 rounded-full bg-slate-900/60 backdrop-blur-md flex items-center justify-center hover:bg-red-600 transition">
+                                        <i class="fa-solid fa-heart text-base group-hover/btn:scale-110 transition" id="likeIcon"></i>
+                                    </div>
+                                    <span class="text-[10px]" id="likeCount">38.2K</span>
+                                </button>
+                                <button class="flex flex-col items-center gap-1 pointer-events-auto">
+                                    <div class="w-9 h-9 rounded-full bg-slate-900/60 backdrop-blur-md flex items-center justify-center hover:bg-blue-600 transition">
+                                        <i class="fa-solid fa-comment text-base"></i>
+                                    </div>
+                                    <span class="text-[10px]">2,410</span>
+                                </button>
+                                <button onclick="shareProposal()" class="flex flex-col items-center gap-1 pointer-events-auto">
+                                    <div class="w-9 h-9 rounded-full bg-slate-900/60 backdrop-blur-md flex items-center justify-center hover:bg-emerald-600 transition">
+                                        <i class="fa-solid fa-share text-base"></i>
+                                    </div>
+                                    <span class="text-[10px]">공유</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Shorts Content Strategy & Source Switcher -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-pink-400"></i> 숏츠 비디오 소스 설정 (9:16)
+                            </h3>
+                            <span class="text-xs text-purple-400 font-medium">샤크 숏츠.mp4</span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            기본 영상으로 <strong class="text-white">샤크 숏츠.mp4</strong>가 설정되어 있습니다. 로컬 MP4 파일 선택 또는 유튜브 URL을 통해 영상을 자유롭게 변경할 수 있습니다.
+                        </p>
+                        
+                        <!-- Mode Selector Buttons -->
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <button onclick="playSharkShorts()" class="px-3 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-play"></i> 샤크 숏츠.mp4 재생
+                            </button>
+                            <label class="cursor-pointer px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition border border-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-folder-open text-amber-400"></i> 내 PC MP4 파일 선택
+                                <input type="file" accept="video/*" onchange="loadLocalVideoFile(event)" class="hidden">
+                            </label>
+                        </div>
+
+                        <!-- Custom URL Switcher -->
+                        <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                            <input type="text" id="customShortsInput" placeholder="유튜브 Shorts URL 입력 (예: https://youtube.com/shorts/...)" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                            <button onclick="updateShortsVideo()" class="px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-rotate"></i> YouTube 연동
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Storyboard & Strategy Breakdown -->
+                    <div class="space-y-4">
+                        <h3 class="text-base font-bold text-white">🎬 샤크 숏츠 콘텐츠 기획 스토리보드 (9:16)</h3>
+
+                        <div class="glass-card p-4 rounded-xl flex gap-4 items-start border border-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-bold text-sm shrink-0">
+                                01
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-sm font-bold text-white">후킹 임팩트 (0~3초)</h4>
+                                    <span class="text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300">샤크 비주얼 시선 집중</span>
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    강렬한 샤크 모티프 비주얼 및 트렌디한 사운드로 이탈 없는 3초 후킹 유도.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-xl flex gap-4 items-start border border-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">
+                                02
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-sm font-bold text-white">핵심 메시지 전달 (4~20초)</h4>
+                                    <span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">공감 & 브랜드 각인</span>
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    빠른 호흡의 편집을 통해 캠페인의 핵심 스토리와 브랜드 메시지를 9:16 풀화면에 시각화.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-xl flex gap-4 items-start border border-slate-800">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                                03
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-sm font-bold text-white">설문 참여 CTA (21~30초)</h4>
+                                    <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">구글 설문 유입</span>
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    "하단 고정링크에서 30초 설문 참여 완료 시 추첨 선물 증정!" 모션 자막으로 설문조사 유입 유도.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Data Analytics Section -->
+        <section id="analytics" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-emerald-400"></i> 캠페인 예측 데이터 & 목표 Analytics
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">설문 응답률, 연령별 분포, 숏츠 도달수 도출 시뮬레이션입니다.</p>
+                </div>
+                <span class="text-xs text-slate-400">Real-time Simulation</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Chart 1: Survey Response Progress vs Target -->
+                <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold text-white">📊 설문별 목표 대비 현재 응답 현황</h3>
+                        <span class="text-xs text-blue-400 font-semibold">Goal: 2,500 Total</span>
+                    </div>
+                    <div class="relative h-64">
+                        <canvas id="surveyProgressChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Target Age Demographic -->
+                <div class="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold text-white">🎯 숏츠 & 설문 주요 타겟 연령 분포</h3>
+                        <span class="text-xs text-purple-400 font-semibold">Main: 2030 Generation</span>
+                    </div>
+                    <div class="relative h-64 flex items-center justify-center">
+                        <canvas id="demographicChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Execution Roadmap Timeline Section -->
+        <section id="roadmap" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-timeline text-amber-400"></i> 캠페인 실행 로드맵 (Execution Schedule)
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">설문 배포부터 숏츠 바이럴, 피드백 종합 보고까지의 주차별 추진 단계입니다.</p>
+                </div>
+                <span class="text-xs text-amber-400 bg-amber-950/40 px-3 py-1 rounded-full border border-amber-800/50">8-Week Roadmap</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Phase 1 -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 relative">
+                    <div class="text-xs font-bold text-blue-400 mb-2">PHASE 01 (1~2주차)</div>
+                    <h3 class="text-base font-bold text-white mb-2">기획 & 설문 세팅</h3>
+                    <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
+                        <li>구글 폼 설문지 4종 문항 확정</li>
+                        <li>타겟군 정의 및 리워드 설계</li>
+                        <li>숏츠 스토리보드 및 콘셉트 수립</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 relative">
+                    <div class="text-xs font-bold text-pink-400 mb-2">PHASE 02 (3~4주차)</div>
+                    <h3 class="text-base font-bold text-white mb-2">숏츠 제작 & 1차 배포</h3>
+                    <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
+                        <li>바이럴 숏츠 3편 촬영 및 편집</li>
+                        <li>유튜브/인스타 릴스 동시 릴리즈</li>
+                        <li>설문 01, 02 대량 유입 유도</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 relative">
+                    <div class="text-xs font-bold text-purple-400 mb-2">PHASE 03 (5~6주차)</div>
+                    <h3 class="text-base font-bold text-white mb-2">데이터 수집 & 리타겟팅</h3>
+                    <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
+                        <li>설문 03 (콘텐츠 반응도) 실시</li>
+                        <li>유효 데이터 정제 및 중간 분석</li>
+                        <li>숏츠 2차 스핀오프 영상 게재</li>
+                    </ul>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 relative">
+                    <div class="text-xs font-bold text-emerald-400 mb-2">PHASE 04 (7~8주차)</div>
+                    <h3 class="text-base font-bold text-white mb-2">종합 평가 & 보고서 작성</h3>
+                    <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside">
+                        <li>설문 04 종합 평가 데이터 산출</li>
+                        <li>최종 KPI 달성률 측정</li>
+                        <li>향후 마케팅 가이드라인 수립</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Survey Preview Modal -->
+    <div id="surveyModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="text-sm font-bold text-white ml-2" id="modalTitle">설문지 미리보기</span>
+                </div>
+                <button onclick="closeSurveyModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <!-- Modal Iframe Container -->
+            <div class="flex-1 bg-white relative">
+                <iframe id="modalIframe" class="w-full h-full border-0" src="" title="Google Form Preview"></iframe>
+            </div>
+            <!-- Modal Footer -->
+            <div class="px-6 py-3 border-t border-slate-800 bg-slate-950 flex justify-between items-center text-xs text-slate-400">
+                <span>* 구글 설문지 보안 설정에 따라 미리보기가 제한될 경우 새 창 열기를 이용해 주세요.</span>
+                <button onclick="closeSurveyModal()" class="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-purple-600 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 border border-purple-400/30 pointer-events-none">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMessage">안내 메시지</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-10 mt-16 text-slate-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white font-bold">
+                    <i class="fa-solid fa-bullhorn text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-slate-200 font-bold">2026 통합 홍보 기획서 & 설문·숏츠 캠페인</p>
+                    <p class="text-[11px] text-slate-500">Interactive Data Strategy Landing Page</p>
+                </div>
+            </div>
+            <p class="text-slate-500">© 2026 Integrated PR Campaign. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Modal functions
+        function openSurveyModal(url, title) {
+            const modal = document.getElementById('surveyModal');
+            const iframe = document.getElementById('modalIframe');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.innerText = title;
+            iframe.src = url;
+            modal.classList.remove('hidden');
+        }
+
+        function closeSurveyModal() {
+            const modal = document.getElementById('surveyModal');
+            const iframe = document.getElementById('modalIframe');
+            modal.classList.add('hidden');
+            iframe.src = '';
+        }
+
+        // Play default Shark Shorts MP4
+        function playSharkShorts() {
+            const video = document.getElementById('shortsVideo');
+            const iframe = document.getElementById('shortsIframe');
+            const fallback = document.getElementById('videoFallback');
+            const titleDisplay = document.getElementById('shortsTitleDisplay');
+
+            iframe.classList.add('hidden');
+            iframe.src = '';
+            video.classList.remove('hidden');
+            fallback.classList.add('hidden');
+            
+            video.src = "샤크 숏츠.mp4";
+            video.play().then(() => {
+                showToast('🦈 샤크 숏츠.mp4 비디오가 재생됩니다!');
+            }).catch(() => {
+                handleVideoError();
+            });
+
+            titleDisplay.innerText = "🦈 샤크 숏츠 (Shark Shorts) - 2026 바이럴 캠페인 9:16 영상!";
+        }
+
+        // Handle video load error (when file isn't in same directory)
+        function handleVideoError() {
+            const fallback = document.getElementById('videoFallback');
+            fallback.classList.remove('hidden');
+        }
+
+        // Local video file upload switcher
+        function loadLocalVideoFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const video = document.getElementById('shortsVideo');
+            const iframe = document.getElementById('shortsIframe');
+            const fallback = document.getElementById('videoFallback');
+            const titleDisplay = document.getElementById('shortsTitleDisplay');
+
+            iframe.classList.add('hidden');
+            iframe.src = '';
+            video.classList.remove('hidden');
+            fallback.classList.add('hidden');
+
+            const fileURL = URL.createObjectURL(file);
+            video.src = fileURL;
+            video.play();
+
+            titleDisplay.innerText = `📹 ${file.name} (9:16 로컬 비디오)`;
+            showToast(`'${file.name}' 비디오 파일이 로드되었습니다.`);
+        }
+
+        // Toggle video sound/mute
+        function toggleVideoMute() {
+            const video = document.getElementById('shortsVideo');
+            const soundIcon = document.getElementById('soundIcon');
+            const soundLabel = document.getElementById('soundLabel');
+
+            if (video.muted) {
+                video.muted = false;
+                soundIcon.className = "fa-solid fa-volume-high text-base";
+                soundLabel.innerText = "소리 켬";
+                showToast('음소가 해제되었습니다.');
+            } else {
+                video.muted = true;
+                soundIcon.className = "fa-solid fa-volume-xmark text-base";
+                soundLabel.innerText = "음소거";
+                showToast('음소거 상태로 전환되었습니다.');
+            }
+        }
+
+        // Custom Shorts Switcher
+        function updateShortsVideo() {
+            const input = document.getElementById('customShortsInput').value.trim();
+            const iframe = document.getElementById('shortsIframe');
+            const video = document.getElementById('shortsVideo');
+            const fallback = document.getElementById('videoFallback');
+
+            if (!input) {
+                showToast('유효한 YouTube Shorts URL 또는 Video ID를 입력해주세요.');
+                return;
+            }
+
+            let videoId = input;
+            if (input.includes('youtube.com/shorts/')) {
+                videoId = input.split('youtube.com/shorts/')[1].split('?')[0];
+            } else if (input.includes('youtu.be/')) {
+                videoId = input.split('youtu.be/')[1].split('?')[0];
+            } else if (input.includes('youtube.com/watch?v=')) {
+                videoId = input.split('v=')[1].split('&')[0];
+            }
+
+            video.pause();
+            video.classList.add('hidden');
+            fallback.classList.add('hidden');
+            iframe.classList.remove('hidden');
+
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&loop=1`;
+            showToast('유튜브 숏츠 영상이 연동되었습니다!');
+        }
+
+        // Like button simulation
+        let isLiked = false;
+        function likeShorts() {
+            const icon = document.getElementById('likeIcon');
+            const count = document.getElementById('likeCount');
+            if (!isLiked) {
+                icon.classList.add('text-red-500');
+                count.innerText = '38.2K + 1';
+                showToast('숏츠에 좋아요를 표시했습니다!');
+                isLiked = true;
+            } else {
+                icon.classList.remove('text-red-500');
+                count.innerText = '38.2K';
+                isLiked = false;
+            }
+        }
+
+        // Share Link Copy
+        function shareProposal() {
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = window.location.href;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            showToast('기획서 웹페이지 주소가 클립보드에 복사되었습니다!');
+        }
+
+        // Toast Notification System
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize Charts on Load
+        window.addEventListener('load', () => {
+            // Chart 1: Survey Progress Bar Chart
+            const ctx1 = document.getElementById('surveyProgressChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['01.소비자 인식', '02.브랜드 선호', '03.숏츠 반응도', '04.최종 평가'],
+                    datasets: [
+                        {
+                            label: '현재 완료 표본 (명)',
+                            data: [656, 450, 616, 240],
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 6
+                        },
+                        {
+                            label: '목표 표본 (명)',
+                            data: [800, 600, 700, 400],
+                            backgroundColor: '#334155',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { family: 'Noto Sans KR' } } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    }
+                }
+            });
+
+            // Chart 2: Demographic Doughnut Chart
+            const ctx2 = document.getElementById('demographicChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['10대 (학생)', '20대 (대학생/초년생)', '30대 (직장인)', '40대 이상'],
+                    datasets: [{
+                        data: [25, 45, 20, 10],
+                        backgroundColor: ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#94a3b8', font: { family: 'Noto Sans KR' } } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
